@@ -66,17 +66,19 @@ Open [http://localhost:3000](http://localhost:3000). The mock data and in-memory
 
 The UI offers three mock Bookly customers. No password is required:
 
-| Customer | Customer ID | Suggested use |
-| --- | --- | --- |
-| Sarah Chen | `CUST-001` | Primary prototype flow: recent order lookup and an eligible return for `Wolf Hall`. |
-| Daniel Ortiz | `CUST-002` | Alternate customer and authorization-boundary checks. |
-| Maya Patel | `CUST-003` | Alternate customer and policy questions. |
+| Customer | Customer ID |
+| --- | --- |
+| Sarah Chen | `CUST-001` |
+| Daniel Ortiz | `CUST-002` |
+| Maya Patel | `CUST-003` |
 
 The primary prototype flow is: sign in as Sarah Chen, ask about the latest order, request a return, select `Wolf Hall`, and explicitly confirm the proposal. Ask about an unverified refund to see the escalation path.
 
 ## Architecture
 
 ![Bookly Concierge model and tool architecture](./detailed-architecture-diagram.png)
+
+**The model can propose actions; only deterministic application code can commit them.**
 
 ### Architecture Principle
 

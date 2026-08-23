@@ -74,13 +74,6 @@ The UI offers three mock Bookly customers. No password is required:
 
 The primary prototype flow is: sign in as Sarah Chen, ask about the latest order, request a return, select `Wolf Hall`, and explicitly confirm the proposal. Ask about an unverified refund to see the escalation path.
 
-### Suggested Review Order
-
-1. Run the app and follow the primary prototype flow above.
-2. Review the architecture diagram and the constrained tool surface.
-3. Follow the return boundary from prompt to tool implementation to deterministic guardrails.
-4. Run the focused tests and adversarial evaluation cases.
-
 ## Architecture
 
 ![Bookly Concierge model and tool architecture](./detailed-architecture-diagram.png)

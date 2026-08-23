@@ -6,7 +6,7 @@ describe("getSpeechText", () => {
     expect(getSpeechText(
       "I checked your recent orders. For order ORD-0988, the return was refunded on 2026-07-08 for 16.99. If you don't see that credit on your statement around that date, I can open a ticket to trace the refund. Would you like me to do that?",
     )).toBe(
-      "I checked your recent orders. Your return was refunded on 8 July 2026 for 16 pounds and 99 pence. If you don't see that credit on your statement around that date, I can open a ticket to trace the refund. Would you like me to do that?",
+      "I checked your recent orders. For order number zero nine eight eight, the return was refunded on 8 July 2026 for 16 pounds and 99 pence. If you don't see that credit on your statement around that date, I can open a ticket to trace the refund. Would you like me to do that?",
     );
   });
 

@@ -21,6 +21,13 @@ function formatSpokenReference(reference: string): string {
   return `${spokenPrefix} ${spokenSuffix}`;
 }
 
+function formatSpokenOrder(orderId: string): string {
+  const digits = orderId.replace(/^ORD-/i, "").split("");
+  const digitNames = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+
+  return `order number ${digits.map((digit) => digitNames[Number(digit)] ?? digit).join(" ")}`;
+}
+
 function formatSpokenAmount(value: string): string {
   const [pounds, pence] = value.split(".");
 
@@ -38,10 +45,11 @@ export function getSpeechText(chatText: string): string {
     .replace(/your return reference:\s*(RMA-\d+)\.?/gi, (_match, reference: string) => (
       `Your return reference is ${formatSpokenReference(reference)}.`
     ))
-    // Order IDs are already visible in chat; they add little value in spoken support.
-    .replace(/\bfor order\s+ORD-[A-Z0-9-]+\s*,?\s*the return\b/gi, "Your return")
-    .replace(/\bfor order\s+ORD-[A-Z0-9-]+(?=\s*[,.:])/gi, "For your order")
-    .replace(/\border\s+ORD-[A-Z0-9-]+\b/gi, "your order")
+    // Speak the useful numeric part of an order ID, without the system-style ORD prefix.
+    .replace(/\bfor order\s+(ORD-\d+)\b/gi, (_match, orderId: string) => (
+      `For ${formatSpokenOrder(orderId)}`
+    ))
+    .replace(/\border\s+(ORD-\d+)\b/gi, (_match, orderId: string) => formatSpokenOrder(orderId))
     .replace(/\b(?:ORD|RMA)-[A-Z0-9-]+\b/gi, "")
     .replace(/\bITEM-[A-Z0-9-]+\b/gi, "")
     .replace(/\b[A-Z]{2,5}-\d{5,}\b/g, "")

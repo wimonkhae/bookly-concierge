@@ -213,12 +213,37 @@ export function BooklyApp() {
     setIsSending(true);
     setMessages((current) => [...current, { role: "user", text }]);
 
-    const response = await fetch("/api/concierge/chat", {
+    let activeSession = session;
+    let activePreviousResponseId = previousResponseId;
+    let response = await fetch("/api/concierge/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId: session.sessionId, message: text, previousResponseId }),
+      body: JSON.stringify({ sessionId: activeSession.sessionId, message: text, previousResponseId: activePreviousResponseId }),
     });
-    const result = await response.json();
+    let result = await response.json();
+
+    // Local development restarts clear the in-memory demo sessions while the page stays open.
+    if (!result.success && result.errorCode === "UNAUTHENTICATED") {
+      const loginResponse = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customerId: activeSession.customerId }),
+      });
+      const loginResult = await loginResponse.json();
+
+      if (loginResult.success) {
+        activeSession = loginResult.session;
+        activePreviousResponseId = undefined;
+        setSession(activeSession);
+        setPreviousResponseId(undefined);
+        response = await fetch("/api/concierge/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId: activeSession.sessionId, message: text }),
+        });
+        result = await response.json();
+      }
+    }
 
     if (result.success) {
       setMessages((current) => [...current, { role: "assistant", text: result.text }]);

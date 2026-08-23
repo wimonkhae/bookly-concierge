@@ -2,6 +2,8 @@
 
 An AI customer-support concierge for Bookly. It handles order status, returns, policy questions, human escalation, and text or voice conversations through a constrained tool surface.
 
+[View the live prototype](https://bookly-concierge.vercel.app/)
+
 ## Features
 
 - Order status

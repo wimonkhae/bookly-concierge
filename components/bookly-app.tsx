@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { getSpeechText } from "@/lib/speech/spoken-text";
 
 type Session = { sessionId: string; customerId: string };
 type Message = { role: "assistant" | "user"; text: string };
@@ -9,41 +10,6 @@ type PreparedAudio = { text: string; audio: HTMLAudioElement; url: string };
 
 function getGreeting(firstName: string): string {
   return `Hi ${firstName}, I’m Bookly Concierge. How can I help today?`;
-}
-
-function formatSpokenDate(value: string): string {
-  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-
-  if (!match) {
-    return value;
-  }
-
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(`${value}T00:00:00.000Z`));
-}
-
-function getSpeechText(chatText: string): string {
-  return chatText
-    .replace(/\border is\s+(?=ORD-[A-Z0-9-]+)/gi, "order ")
-    .replace(/\b(?:ORD|RMA)-[A-Z0-9-]+\b/gi, "")
-    .replace(/\bITEM-[A-Z0-9-]+\b/gi, "")
-    .replace(/\b[A-Z]{2,5}-\d{5,}\b/g, "")
-    .replace(/[-\s]*(?:Order ID|Return ID|Item ID|Tracking number|Tracking):\s*/gi, "")
-    .replace(/\(\s*\)/g, "")
-    .replace(/Item:\s*/gi, "for ")
-    .replace(/Refund status:\s*Refunded/gi, "It has been refunded")
-    .replace(/Refund amount:\s*/gi, "The refund amount was ")
-    .replace(/Processed on:\s*/gi, "It was processed on ")
-    .replace(/\b\d{4}-\d{2}-\d{2}\b/g, formatSpokenDate)
-    .replace(/\s*[-•]\s*/g, ". ")
-    .replace(/\s+([,.!?])/g, "$1")
-    .replace(/\s{2,}/g, " ")
-    .replace(/\.\s*\./g, ".")
-    .trim();
 }
 
 function getChatFailureMessage(errorCode?: string): string {

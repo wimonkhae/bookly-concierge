@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 
 type Session = { sessionId: string; customerId: string };
 type Message = { role: "assistant" | "user"; text: string };
@@ -269,12 +269,30 @@ export function BooklyApp() {
 
   async function sendMessage(event: FormEvent) {
     event.preventDefault();
+    await submitMessage();
+  }
+
+  async function submitMessage() {
     const text = message.trim();
+
+    if (!text || !session || isSending) {
+      return;
+    }
+
     setMessage("");
     if (composerRef.current) {
       composerRef.current.style.height = "auto";
     }
     await sendText(text);
+  }
+
+  function sendMessageOnEnter(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) {
+      return;
+    }
+
+    event.preventDefault();
+    void submitMessage();
   }
 
   function updateMessage(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -379,7 +397,7 @@ export function BooklyApp() {
             {isSending && <p className="message assistant loading">Checking Bookly…</p>}
           </div>
           <form className="chat-form" onSubmit={sendMessage}>
-            <textarea ref={composerRef} value={message} onChange={updateMessage} rows={1} placeholder="Ask about an order or return" aria-label="Message Bookly Concierge" />
+            <textarea ref={composerRef} value={message} onChange={updateMessage} onKeyDown={sendMessageOnEnter} rows={1} placeholder="Ask about an order or return" aria-label="Message Bookly Concierge" />
             <button className={`microphone ${isRecording ? "recording" : ""}`} type="button" onClick={toggleRecording} aria-label="Record voice message">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z" />

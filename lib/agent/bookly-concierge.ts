@@ -406,7 +406,7 @@ function resolvePendingReturnDecision(
   return createdReturn.success
     ? {
         success: true,
-        text: `Done. Your return reference is ${createdReturn.returnRecord.returnId}. Is there anything else I can help with today?`,
+        text: `Done. Your return reference: ${createdReturn.returnRecord.returnId}. Is there anything else I can help with today?`,
       }
     : { success: false, errorCode: "RETURN_EXECUTION_FAILED" };
 }

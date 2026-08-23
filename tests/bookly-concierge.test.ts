@@ -175,7 +175,7 @@ describe("Bookly Concierge order-status agent", () => {
 
     expect(result).toEqual({
       success: true,
-      text: "Done. Your return reference is RMA-1842. Is there anything else I can help with today?",
+      text: "Done. Your return reference: RMA-1842. Is there anything else I can help with today?",
     });
     await expect(
       respondToBooklyMessage(sessionId, "No, that's all.", {

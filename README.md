@@ -1,12 +1,8 @@
 # Bookly Concierge
 
-AI customer-support concierge for Bookly, built for the Decagon Solutions Engineering take-home.
+An AI customer-support concierge for Bookly. It handles order status, returns, policy questions, human escalation, and text or voice conversations through a constrained tool surface.
 
-## Demo
-
-[Live demo (Vercel)](https://your-bookly-concierge.vercel.app) - replace this URL after deployment.
-
-Bookly Concierge supports:
+## Features
 
 - Order status
 - Returns with clarification and explicit confirmation
@@ -14,34 +10,80 @@ Bookly Concierge supports:
 - Human escalation for unverified outcomes
 - Text and voice conversations
 
-The primary demo path is: sign in as Sarah Chen, ask about the latest order, request a return, select `Wolf Hall`, and explicitly confirm the proposal. Ask about an unverified refund to see the escalation path.
+## Tech Stack
 
-### Suggested Review Order
+- Next.js 16 with the App Router
+- React 19 and TypeScript
+- OpenAI JavaScript SDK with the Responses API, speech-to-text, and text-to-speech
+- CSS modules-free global styling in `app/globals.css`
+- Vitest for unit and evaluation tests
+- ESLint and TypeScript for static checks
 
-1. Run the app and follow the primary demo path above.
-2. Review the architecture diagram and the constrained tool surface.
-3. Follow the return boundary from prompt to tool implementation to deterministic guardrails.
-4. Run the focused tests and adversarial evaluation cases.
+## Prerequisites
 
-## Quick Start
+- Node.js 20 or later
+- An OpenAI API key for chat and voice functionality
+
+## Getting Started
+
+Install dependencies and create a local environment file:
 
 ```bash
 npm install
 cp .env.example .env.local
-npm run dev
 ```
 
-Required in `.env.local`:
+Set your OpenAI API key in `.env.local`:
 
 ```bash
 OPENAI_API_KEY=your_key_here
 ```
 
-Optionally set `OPENAI_MODEL`; it defaults to `gpt-5`. Open [http://localhost:3000](http://localhost:3000).
+`OPENAI_MODEL` is optional and defaults to `gpt-5`.
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). The mock data and in-memory session state reset whenever the development server restarts.
+
+## Available Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the Next.js development server. |
+| `npm run build` | Create a production build. |
+| `npm run start` | Run the production build locally. |
+| `npm run lint` | Run ESLint. |
+| `npm run typecheck` | Run TypeScript without emitting files. |
+| `npm test` | Run the complete Vitest test suite. |
+| `npm run evals` | Run the focused adversarial evaluation cases. |
+| `npm run test:watch` | Run Vitest in watch mode. |
+
+## Prototype Accounts
+
+The UI offers three mock Bookly customers. No password is required:
+
+| Customer | Customer ID | Suggested use |
+| --- | --- | --- |
+| Sarah Chen | `CUST-001` | Primary prototype flow: recent order lookup and an eligible return for `Wolf Hall`. |
+| Daniel Ortiz | `CUST-002` | Alternate customer and authorization-boundary checks. |
+| Maya Patel | `CUST-003` | Alternate customer and policy questions. |
+
+The primary prototype flow is: sign in as Sarah Chen, ask about the latest order, request a return, select `Wolf Hall`, and explicitly confirm the proposal. Ask about an unverified refund to see the escalation path.
+
+### Suggested Review Order
+
+1. Run the app and follow the primary prototype flow above.
+2. Review the architecture diagram and the constrained tool surface.
+3. Follow the return boundary from prompt to tool implementation to deterministic guardrails.
+4. Run the focused tests and adversarial evaluation cases.
 
 ## Architecture
 
-![Bookly Concierge model and tool architecture](./public/bookly-concierge-architecture.png)
+![Bookly Concierge model and tool architecture](./detailed-architecture-diagram.png)
 
 ### Architecture Principle
 
@@ -98,7 +140,7 @@ Inspect the [confirmation resolver](./lib/agent/bookly-concierge.ts#L345), [elig
 
 ## Grounding And Policy
 
-The prototype uses structured Bookly policy data rather than RAG. This is deliberate: the policy set is small and controlled, so semantic retrieval would add complexity without meaningful benefit. `lookup_policy` is an abstraction boundary that can be backed by production search or retrieval as Bookly's knowledge base grows.
+The prototype uses structured Bookly policy data. This is deliberate: the policy set is small and controlled, so additional search infrastructure would add complexity without meaningful benefit. `lookup_policy` remains an abstraction boundary as Bookly's knowledge base grows.
 
 ## Customer Identity And Authorization
 

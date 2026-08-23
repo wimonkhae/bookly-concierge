@@ -72,7 +72,7 @@ The UI offers three mock Bookly customers. No password is required:
 | Daniel Ortiz | `CUST-002` |
 | Maya Patel | `CUST-003` |
 
-The primary prototype flow is: sign in as Sarah Chen, ask about the latest order, request a return, select `Wolf Hall`, and explicitly confirm the proposal. Ask about an unverified refund to see the escalation path.
+The primary prototype flow is: sign in as Sarah Chen, ask about the latest order, request a return, select a book to return, and explicitly confirm the proposal. Ask about an unverified refund to see the escalation path.
 
 ## Architecture
 
